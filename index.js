@@ -1,7 +1,15 @@
 import express, { json } from "express";
-
+import { validateUserCreation } from "./midlaware.js";
 const app = express();
-app.use(express.json());
+// app.use(express.json());
+
+
+const router= express.Router();
+
+router.use((req, res, next)=>{
+  console.log("router midleware")
+  next();
+});
 
 const data=[
     {
@@ -20,6 +28,24 @@ const data=[
         branch : "MCA"
     }
 ];
+
+
+router.get("/api/data/:id",(req,res)=>{
+  res.send("user id")
+});
+
+app.use("/api",router)
+
+
+
+app.use((req , res , next) => {
+  console.log("Current Date : " , Date.now());
+  next();
+})
+
+app.get("/" , (req , res) => {
+  res.send("Welcome to my api")
+})
 
 app.get("/api/data", (req,res)=>{
     res.json(data);
@@ -52,7 +78,7 @@ app.get("/api/data/:id", (req, res) => {
 });
 
 /// push user
-app.post("/api/data", (req, res) => {
+app.post("/api/data".validateUserCreation,(req, res) => {
   try {
     const { id, name, branch } = req.body;
 
