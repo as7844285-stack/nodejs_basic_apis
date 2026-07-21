@@ -1,7 +1,7 @@
 import express, { json } from "express";
 import { validateUserCreation } from "./midlaware.js";
 const app = express();
-// app.use(express.json());
+app.use(express.json());
 
 
 const router= express.Router();
@@ -78,7 +78,7 @@ app.get("/api/data/:id", (req, res) => {
 });
 
 /// push user
-app.post("/api/data".validateUserCreation,(req, res) => {
+app.post("/api/data",validateUserCreation,(req, res) => {
   try {
     const { id, name, branch } = req.body;
 
