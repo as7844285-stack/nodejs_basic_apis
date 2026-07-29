@@ -34,10 +34,14 @@ export const addProduct = async (req, res) => {
   try {
     const { name, user, price } = req.body;
 
+    const file = req.file;
+    console.log("file : ", file);
+
     const product = new Product({
       name,
       user,
       price,
+      image: file?.path,
     });
     await product.save();
 
