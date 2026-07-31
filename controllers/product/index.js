@@ -101,7 +101,7 @@ export const removeProduct = async (req, res) => {
       res.status(201).json({
         success: true,
         message: "product deleted successfully",
-        data: "prodcut",
+        data: "product",
       });
     }
   } catch (error) {
@@ -111,3 +111,5 @@ export const removeProduct = async (req, res) => {
     });
   }
 };
+
+

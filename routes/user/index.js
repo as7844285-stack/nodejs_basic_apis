@@ -4,12 +4,15 @@ import {
   getIdUsers,
   updateUsers,
   deleteUsers,
+  signUp,
   login,
 } from "../../controllers/user/index.js";
 
 import express from "express";
 
 const router = express.Router();
+
+router.post("/user/signup", signUp);
 
 router.post("/user/login", login);
 

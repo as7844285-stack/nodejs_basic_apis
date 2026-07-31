@@ -34,4 +34,6 @@ router.put("/product/:id", updateProduct);
 
 router.delete("/product/:id",removeProduct);
 
+
+
 export default router;
