@@ -6,6 +6,7 @@ import productRouter from "./routes/product/index.js";
 import cors from "cors";
 import multer from "multer";
 import wishlistRouter from "./routes/wishlist/index.js"
+import cartRouter from "./routes/addToCart/cart.js"
 
 
 const app = express();
@@ -19,7 +20,7 @@ dotenv.config();
 connectDB();
 
 
-app.use("/api/", userRouter, productRouter , wishlistRouter);
+app.use("/api/", userRouter, productRouter , wishlistRouter,cartRouter);
 
 app.listen(3000, () => {
   console.log("App is running on port : 3000");

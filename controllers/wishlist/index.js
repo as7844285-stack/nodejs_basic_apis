@@ -1,7 +1,6 @@
 import { User } from "../../models/user.js";
 import { Wishlist } from "../../models/wishlist.js";
 
-
 export const postWishlist = async (req, res) => {
   try {
     const { productId } = req.body;
@@ -18,9 +17,7 @@ export const postWishlist = async (req, res) => {
         products: [productId],
       });
     } else if (
-      wishlist.products.some(
-        (id) => id.toString() === productId.toString()
-      )
+      wishlist.products.some((id) => id.toString() === productId.toString())
     ) {
       return res.status(409).json({
         message: "Product already in wishlist",
@@ -36,7 +33,6 @@ export const postWishlist = async (req, res) => {
       message: "Product added to wishlist",
       success: true,
     });
-
   } catch (error) {
     console.log("Wishlist Error:", error);
 
@@ -47,23 +43,23 @@ export const postWishlist = async (req, res) => {
   }
 };
 
+export const getWhislist = async (req, res) => {
+  try {
+    const userId = req.user.id;
 
-export const getWhislist= async (req,res)=>{
-    try{
-    const userId = req.user.id
-
-    const wishlist = await Wishlist.find({user:userId}).populate("products");
+    const wishlist = await Wishlist.find({ user: userId }).populate(
+      "products.product",
+    );
     res.status(201).json({
-        message:"list fetch successfully",
-        success:true,
-        data:wishlist
-    })
-
-}catch(error){
+      message: "list fetch successfully",
+      success: true,
+      data: wishlist,
+    });
+  } catch (error) {
     console.log(error);
     res.status(500).json({
-    message:"Internal server error",
-    success: false
+      message: "Internal server error",
+      success: false,
     });
-}
+  }
 };
