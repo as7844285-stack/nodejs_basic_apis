@@ -4,7 +4,6 @@ import {
   addProduct,
   updateProduct,
   removeProduct,
-  getMyProduct,
 } from "../../controllers/product/index.js";
 import express, { Router } from "express";
 import { authentication } from "../../midlaware.js";
@@ -14,26 +13,21 @@ const router = express.Router();
 
 const fileStorage = diskStorage({
   destination: (req, res, cb) => {
-    cb(null, './uploads')
+    cb(null, "./uploads");
   },
   filename: (req, res, cb) => {
-    cb(null, Date.now() + "-" + res.originalname)
-  }
-
+    cb(null, Date.now() + "-" + res.originalname);
+  },
 });
 
-const upload = multer({ storage: fileStorage })
-
-router.get("/products-my",authentication, getMyProduct);
+const upload = multer({ storage: fileStorage });
 
 router.get("/products", getProduct);
 
-router.post("/product", upload.single('image'), addProduct);
+router.post("/product", upload.single("image"), addProduct);
 
-router.put("/product/:id", updateProduct);
+router.put("/product/:id", upload.single("image"), updateProduct);
 
-router.delete("/product/:id",removeProduct);
-
-
+router.delete("/product/:id", removeProduct);
 
 export default router;
