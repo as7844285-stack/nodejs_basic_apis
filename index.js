@@ -5,9 +5,9 @@ import userRouter from "./routes/user/index.js";
 import productRouter from "./routes/product/index.js";
 import cors from "cors";
 import multer from "multer";
-import wishlistRouter from "./routes/wishlist/index.js"
-import cartRouter from "./routes/addToCart/cart.js"
-
+import wishlistRouter from "./routes/wishlist/index.js";
+import cartRouter from "./routes/addToCart/cart.js";
+import orderRouter from "./routes/order/index.js";
 
 const app = express();
 app.use(express.json());
@@ -19,8 +19,14 @@ app.use(cors({ origin: "*" }));
 dotenv.config();
 connectDB();
 
-
-app.use("/api/", userRouter, productRouter , wishlistRouter,cartRouter);
+app.use(
+  "/api/",
+  userRouter,
+  productRouter,
+  wishlistRouter,
+  cartRouter,
+  orderRouter,
+);
 
 app.listen(3000, () => {
   console.log("App is running on port : 3000");
