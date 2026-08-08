@@ -1,15 +1,15 @@
 import { Order } from "../../models/order.js";
-import { Cart } from "../../models/cart.js"; // adjust path to your actual cart model
+import { Cart } from "../../models/cart.js";
 
 export const placeOrder = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { shoppingAddress, paymentMethod } = req.body;
+    const { shippingAddress, paymentMethod } = req.body;
 
-    if (!shoppingAddress) {
+    if (!shippingAddress) {
       return res.status(400).json({
         success: false,
-        message: "Shopping address is required",
+        message: "Shipping address is required",
       });
     }
 
@@ -21,6 +21,15 @@ export const placeOrder = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Cart is empty",
+      });
+    }
+
+    // Guard against a product being deleted after being added to cart
+    const missingProduct = cart.products.find((item) => !item.product);
+    if (missingProduct) {
+      return res.status(400).json({
+        success: false,
+        message: "One or more products in your cart are no longer available",
       });
     }
 
@@ -38,14 +47,13 @@ export const placeOrder = async (req, res) => {
     const order = await Order.create({
       user: userId,
       products: orderProducts,
-      shoppingAddress,
+      shippingAddress,
       totalAmount,
       paymentMethod: paymentMethod || "COD",
     });
 
     const populatedOrder = await order.populate("products.product");
 
-    // clear the cart after order is placed
     cart.products = [];
     await cart.save();
 

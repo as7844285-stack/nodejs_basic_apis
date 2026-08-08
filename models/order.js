@@ -15,43 +15,22 @@ const orderSchema = new mongoose.Schema(
       },
     ],
 
-    shoppingAddress: {
-      name: {
-        type: String,
-        required: true,
-      },
-      address: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      state: {
-        type: String,
-        required: true,
-      },
-      country: {
-        type: String,
-        required: true,
-      },
-      pincode: {
-        type: String,
-        required: true,
-      },
-      phone: {
-        type: String,
-        required: true,
-      },
+    shippingAddress: {
+      name: { type: String, required: true },
+      address: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      country: { type: String, required: true },
+      pincode: { type: String, required: true },
+      phone: { type: String, required: true },
     },
+
     totalAmount: { type: Number, required: true },
     paymentMethod: {
       type: String,
       enum: ["COD"],
       default: "COD",
     },
-
     paymentStatus: {
       type: String,
       enum: ["Pending", "Paid", "Failed"],
