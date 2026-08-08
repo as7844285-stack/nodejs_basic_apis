@@ -8,6 +8,7 @@ import multer from "multer";
 import wishlistRouter from "./routes/wishlist/index.js";
 import cartRouter from "./routes/addToCart/cart.js";
 import orderRouter from "./routes/order/index.js";
+import adminRouter from "./routes/admin/index.js";
 
 const app = express();
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use(
   wishlistRouter,
   cartRouter,
   orderRouter,
+  adminRouter,
 );
 
 app.listen(3000, () => {

@@ -4,6 +4,14 @@ import { Cart } from "../../models/cart.js"; // adjust path to your actual cart 
 export const placeOrder = async (req, res) => {
   try {
     const userId = req.user.id;
+    const { shoppingAddress, paymentMethod } = req.body;
+
+    if (!shoppingAddress) {
+      return res.status(400).json({
+        success: false,
+        message: "Shopping address is required",
+      });
+    }
 
     const cart = await Cart.findOne({ user: userId }).populate(
       "products.product",
@@ -30,9 +38,13 @@ export const placeOrder = async (req, res) => {
     const order = await Order.create({
       user: userId,
       products: orderProducts,
+      shoppingAddress,
       totalAmount,
+      paymentMethod: paymentMethod || "COD",
     });
+
     const populatedOrder = await order.populate("products.product");
+
     // clear the cart after order is placed
     cart.products = [];
     await cart.save();

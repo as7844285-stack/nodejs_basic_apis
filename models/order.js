@@ -14,7 +14,49 @@ const orderSchema = new mongoose.Schema(
         price: { type: Number, required: true }, // snapshot price at time of order
       },
     ],
+
+    shoppingAddress: {
+      name: {
+        type: String,
+        required: true,
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      state: {
+        type: String,
+        required: true,
+      },
+      country: {
+        type: String,
+        required: true,
+      },
+      pincode: {
+        type: String,
+        required: true,
+      },
+      phone: {
+        type: String,
+        required: true,
+      },
+    },
     totalAmount: { type: Number, required: true },
+    paymentMethod: {
+      type: String,
+      enum: ["COD"],
+      default: "COD",
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: ["Pending", "Paid", "Failed"],
+      default: "Pending",
+    },
     status: {
       type: String,
       enum: ["pending", "confirmed", "shipped", "delivered", "cancelled"],
