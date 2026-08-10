@@ -18,7 +18,7 @@ export const addProduct = async (req, res) => {
     const file = req.file;
 
     const product = new Product({
-      user: req.user.id, // required by schema
+      // user: req.user.id, // required by schema
       name,
       description,
       price,
