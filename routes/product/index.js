@@ -11,23 +11,12 @@ import multer from "multer";
 import { diskStorage } from "multer";
 const router = express.Router();
 
-const fileStorage = diskStorage({
-  destination: (req, res, cb) => {
-    cb(null, "./uploads");
-  },
-  filename: (req, res, cb) => {
-    cb(null, Date.now() + "-" + res.originalname);
-  },
-});
-
-const upload = multer({ storage: fileStorage });
-
 router.get("/products", getProduct);
 
-router.post("/product", upload.single("image"), addProduct);
+// router.post("/product", upload.single("image"), addProduct);
 
-router.put("/product/:id", upload.single("image"), updateProduct);
+// router.put("/product/:id", upload.single("image"), updateProduct);
 
-router.delete("/product/:id", removeProduct);
+// router.delete("/product/:id", removeProduct);
 
 export default router;

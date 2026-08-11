@@ -6,6 +6,8 @@ export const placeOrder = async (req, res) => {
     const userId = req.user.id;
     const { shippingAddress, paymentMethod } = req.body;
 
+    console.log("req body", req.body);
+
     if (!shippingAddress) {
       return res.status(400).json({
         success: false,
