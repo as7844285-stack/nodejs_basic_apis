@@ -36,41 +36,6 @@ export const getIdUsers = async (req, res) => {
   }
 };
 
-// export const login = async (req, res) => {
-//   try {
-//     // const { id } = req.body;
-//     const { email, password } = req.body;
-
-//     const existUser = await User.findOne({ email, password });
-
-//     if (!existUser) {
-//       return res.status(400).json({
-//         message: "Not found",
-//       });
-//     }
-
-//     const token = jwt.sign(
-//       {id: existUser._id,
-//         name:existUser.name,
-//         email:existUser.email
-//       },
-//       process.env.JWT_SECRET,
-//     );
-//     return res.status(200).json({
-//       data:req.body,
-//       user:existUser,
-//       message: "login successfully",
-//       token,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Something went wrong",
-//     });
-//   }
-// };
-
 export const updateUsers = async (req, res) => {
   try {
     const { id } = req.params;
@@ -124,14 +89,14 @@ export const deleteUsers = async (req, res) => {
   }
 };
 
-export const signUp= async (req,res)=>{
-  try{
-    const {name , email, password}= req.body;
+export const signUp = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-    console.log("body" , req.body);
+    console.log("body", req.body);
 
-    const isExist = await User.findOne({email});
-    if(isExist){
+    const isExist = await User.findOne({ email });
+    if (isExist) {
       return res.status(404).json({
         success: false,
         message: "User already exist",
@@ -140,7 +105,7 @@ export const signUp= async (req,res)=>{
     const user = new User({
       name,
       email,
-      password
+      password,
     });
     await user.save();
     res.status(201).json({
@@ -148,72 +113,96 @@ export const signUp= async (req,res)=>{
       message: "Signup/register successfully",
       data: user,
     });
-  }catch(error){
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
-}
+};
 
-// export const signUp = async (req, res) => {
+// export const login = async (req, res) => {
 //   try {
-//     const { name, email, password } = req.body;
-//     console.log("UserData", req.body);
-//     const isExist = await User.findOne({ email });
-//     if (!isExist) {
-//       return res.status(500).json({
-//         message: "email already exist",
-//         success: false,
+//     // const {id}= req.body;
+//     const { email, password } = req.body;
+
+//     const existUser = await User.findOne({ email, password });
+
+//     if (!existUser) {
+//       res.status(500).json({
+//         message: "something want wrong",
+//         success: "true",
 //       });
 //     }
-//     const User = new User({
-//       name,
-//       email,
-//       password,
-//     });
-//     await User.save();
-//     res.status(201).json({
-//       message: "signUp complete successfully",
+//     const token = jwt.sign(
+//       {
+//         id: existUser._id,
+//         email: existUser.email,
+//       },
+//       process.env.JWT_SECRET,
+//     );
+
+//     return res.status(201).json({
+//       data: req.body,
+//       message: "Login successful",
 //       success: true,
+//       token,
 //     });
 //   } catch (error) {
-//     res.status(404).json({
-//       message: "error found",
-//       success: "false",
+//     console.log(error);
+//     return res.status(404).json({
+//       message: "error is here",
 //     });
 //   }
 // };
 
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-export const login= async (req,res)=>{
-  try{
-    // const {id}= req.body;
-    const { email, password}= req.body;
+    // 1. Email se user find karo
+    const existUser = await User.findOne({ email });
 
-    const existUser= await User.findOne({ email, password });
-
-    if(!existUser){
-      res.status(500).json({
-        message:"something want wrong",
-        success:"true"
+    // 2. User nahi mila
+    if (!existUser) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
       });
     }
-    const token= jwt.sign({
-      id : existUser._id,
-      email : existUser.email,
-    },process.env.JWT_SECRET);
 
-    return res.status(201).json({
-      data: req.body,
-      message:"Login successful",
+    // 3. Password check karo
+    const isPasswordMatch = await bcrypt.compare(password, existUser.password);
+
+    // 4. Password galat hai
+    if (!isPasswordMatch) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+        success: false,
+      });
+    }
+
+    // 5. JWT token banao
+    const token = jwt.sign(
+      {
+        id: existUser._id,
+        email: existUser.email,
+      },
+      process.env.JWT_SECRET,
+    );
+
+    // 6. Successful response
+    return res.status(200).json({
+      message: "Login successful",
       success: true,
       token,
     });
-  }catch(error){
+  } catch (error) {
     console.log(error);
-    return res.status(404).json({
-      message:"error is here"
+
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
     });
   }
-}
+};
